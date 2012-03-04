@@ -8,7 +8,7 @@
 	<url>http://maven.apache.org</url>
 
 	<parent>
-		<artifactId>log-proc</artifactId>
+		<artifactId>log.parent</artifactId>
 		<groupId>com.github.drashid</groupId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
