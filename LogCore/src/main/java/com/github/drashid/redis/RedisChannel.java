@@ -1,4 +1,4 @@
-package com.github.drashid.module;
+package com.github.drashid.redis;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

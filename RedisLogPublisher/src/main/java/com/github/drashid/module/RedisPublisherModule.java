@@ -1,17 +1,15 @@
 package com.github.drashid.module;
 
 import java.net.InetAddress;
-import redis.clients.jedis.Jedis;
 import com.github.drashid.parse.LogParser;
 import com.github.drashid.parse.Slf4jLogParser;
+import com.github.drashid.redis.RedisChannel;
 import com.github.drashid.redis.RedisConfig;
+import com.github.drashid.redis.RedisModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 public class RedisPublisherModule extends AbstractModule {
-
-  public static final String CHANNEL_ROOT = "log." + getMachineIp() + "->";
   
   private final String channelName;
   
@@ -24,20 +22,13 @@ public class RedisPublisherModule extends AbstractModule {
   }
   
   public RedisPublisherModule(String channelName) {
-    this.channelName = CHANNEL_ROOT + channelName;
+    this.channelName = RedisModule.LOG_CHANNEL_ROOT + getMachineIp() + "->" + channelName;
   }
   
   @Override
   protected void configure() {
+    install(new RedisModule(new RedisConfig()));
     bind(LogParser.class).to(Slf4jLogParser.class);
-  }
-  
-  @Provides @Singleton
-  public Jedis client(RedisConfig config){
-    //TODO Config
-    Jedis jedis = new Jedis("127.0.0.1", 6379);
-    jedis.connect();
-    return jedis;
   }
 
   @Provides @RedisChannel

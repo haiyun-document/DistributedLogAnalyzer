@@ -19,7 +19,7 @@
 			<id>clojars.org</id>
 			<url>http://clojars.org/repo</url>
 		</repository>
-	</repositories> 
+	</repositories>
 
 	<properties>
 		<guice.version>3.0</guice.version>
@@ -27,6 +27,12 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.drashid</groupId>
+			<artifactId>log.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<!-- Common Libs -->
 		<dependency>
 			<groupId>storm</groupId>

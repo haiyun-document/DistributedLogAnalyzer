@@ -1,17 +1,31 @@
 package com.github.drashid.publisher;
 
+import org.apache.commons.io.input.Tailer;
 import redis.clients.jedis.Jedis;
-import com.github.drashid.module.RedisChannel;
+import redis.clients.jedis.JedisPool;
+import com.github.drashid.redis.RedisChannel;
 import com.google.inject.Inject;
 
 public class RedisLogPublisher extends AbstractTailAggregator {
   
-  @Inject
+  protected JedisPool pool;  
   protected Jedis redisClient;
-
-  @Inject @RedisChannel
   protected String channel;
 
+  @Inject
+  public RedisLogPublisher(JedisPool pool, @RedisChannel String channel) {
+    this.pool = pool;
+    this.redisClient = pool.getResource();
+    this.channel = channel;
+  }
+  
+  @Override
+  public void init(Tailer tailer) {
+    super.init(tailer);
+    
+    redisClient.connect();
+  }
+  
   @Override
   protected void publishMessage(String message){
     if(message == null || (message = message.trim()).length() == 0){
