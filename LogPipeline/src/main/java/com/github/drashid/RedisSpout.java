@@ -1,6 +1,5 @@
-
-
 package com.github.drashid;
+
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,27 +14,23 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
 import com.github.drashid.redis.RedisModule;
-import com.google.inject.Inject;
+import com.github.drashid.redis.RedisPoolManager;
 
 public class RedisSpout extends BaseRichSpout {
 
   private static final long                 serialVersionUID = -1601631143587291210L;
   private LinkedBlockingQueue<RedisMessage> messageQueue;
   private SpoutOutputCollector              collector;
-  private ExecutorService service;
-  
-  @Inject
+  private ExecutorService                   service;
   private JedisPool                         pool;
 
-  public RedisSpout() {
+  public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
+    this.collector = collector;
+    pool = RedisPoolManager.getInstance();
     messageQueue = new LinkedBlockingQueue<RedisMessage>();
     service = Executors.newSingleThreadExecutor();
-  }
-
-  public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
-    this.collector = collector;
-
-    service.execute( new Runnable(){
+    
+    service.execute(new Runnable(){
       public void run() {
         Jedis jedis = pool.getResource();
         try {
@@ -61,8 +56,7 @@ public class RedisSpout extends BaseRichSpout {
     declarer.declare(new Fields("source", "message"));
   }
 
-
-  static class RedisMessage {
+  private static class RedisMessage {
     private final String message;
     private final String channel;
     
@@ -80,7 +74,7 @@ public class RedisSpout extends BaseRichSpout {
     }
   }
   
-  public static class PubSub extends JedisPubSub {
+  private static class PubSub extends JedisPubSub {
     
     private LinkedBlockingQueue<RedisMessage> queue;
 
