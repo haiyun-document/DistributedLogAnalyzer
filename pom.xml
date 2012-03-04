@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>RedisLogPublisher</module>
+    <module>LogPublisher</module>
     <module>LogCore</module>
     <module>LogPipeline</module>  
   </modules>
