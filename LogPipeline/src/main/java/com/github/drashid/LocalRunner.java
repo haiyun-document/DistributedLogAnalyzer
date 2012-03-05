@@ -1,15 +1,13 @@
-
-
 package com.github.drashid;
-
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
+import com.github.drashid.inject.InjectorManager;
 import com.github.drashid.redis.RedisConfig;
 import com.github.drashid.redis.RedisModule;
-import com.github.drashid.redis.RedisPoolManager;
+import com.github.drashid.spout.RedisSpout;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -21,7 +19,7 @@ public class LocalRunner {
     @Override
     protected void configure() {
       install(new RedisModule(new RedisConfig()));   
-      requestStaticInjection(RedisPoolManager.class);
+      requestStaticInjection(InjectorManager.class);
     }
   }
 

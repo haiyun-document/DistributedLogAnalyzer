@@ -1,4 +1,4 @@
-package com.github.drashid;
+package com.github.drashid.spout;
 
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -13,20 +13,20 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
+import com.github.drashid.inject.InjectorManager;
 import com.github.drashid.redis.RedisModule;
-import com.github.drashid.redis.RedisPoolManager;
 
 public class RedisSpout extends BaseRichSpout {
 
   private static final long                 serialVersionUID = -1601631143587291210L;
   private LinkedBlockingQueue<RedisMessage> messageQueue;
-  private SpoutOutputCollector              collector;
+  private SpoutOutputCollector              collector;  
   private ExecutorService                   service;
   private JedisPool                         pool;
 
   public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
     this.collector = collector;
-    pool = RedisPoolManager.getInstance();
+    pool = InjectorManager.get(JedisPool.class);
     messageQueue = new LinkedBlockingQueue<RedisMessage>();
     service = Executors.newSingleThreadExecutor();
     
