@@ -10,23 +10,23 @@ import redis.clients.jedis.JedisPubSub;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
-import com.github.drashid.inject.InjectorManager;
 import com.github.drashid.redis.RedisModule;
+import com.google.inject.Inject;
 
-public class RedisSpout extends BaseRichSpout {
+public class RedisSpout extends AbstractInjectedSpout {
 
   private static final long                 serialVersionUID = -1601631143587291210L;
   private LinkedBlockingQueue<RedisMessage> messageQueue;
   private SpoutOutputCollector              collector;  
   private ExecutorService                   service;
+  
+  @Inject
   private JedisPool                         pool;
 
-  public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
+  protected void _open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
     this.collector = collector;
-    pool = InjectorManager.get(JedisPool.class);
     messageQueue = new LinkedBlockingQueue<RedisMessage>();
     service = Executors.newSingleThreadExecutor();
     

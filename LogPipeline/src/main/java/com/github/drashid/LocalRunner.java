@@ -25,8 +25,9 @@ public class LocalRunner {
 
   public static void main(String[] args) {
     Injector inject = Guice.createInjector(new LocalRunnerModule());
+    
     TopologyBuilder builder = new TopologyBuilder();
-    builder.setSpout("redisLogSpout", inject.getInstance(RedisSpout.class));
+    builder.setSpout("redisLogSpout", new RedisSpout());
 
     Config conf = new Config();
     conf.setDebug(true);
