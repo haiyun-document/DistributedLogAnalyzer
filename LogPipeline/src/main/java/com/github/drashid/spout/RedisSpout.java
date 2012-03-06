@@ -24,7 +24,8 @@ public class RedisSpout extends AbstractInjectedSpout {
   
   @Inject
   private JedisPool                         pool;
-
+  private PubSub                            pubsub;
+  
   protected void _open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
     this.collector = collector;
     messageQueue = new LinkedBlockingQueue<RedisMessage>();
@@ -34,7 +35,8 @@ public class RedisSpout extends AbstractInjectedSpout {
       public void run() {
         Jedis jedis = pool.getResource();
         try {
-          jedis.psubscribe(new PubSub(messageQueue), RedisModule.LOG_CHANNEL_ROOT + "*");
+          pubsub = new PubSub(messageQueue);
+          jedis.psubscribe(pubsub, RedisModule.LOG_CHANNEL_ROOT + "*");
         }
         finally {
           pool.returnResource(jedis);
@@ -43,6 +45,12 @@ public class RedisSpout extends AbstractInjectedSpout {
     });
   }
 
+  @Override
+  public void close() {
+    pubsub.unsubscribe();
+    service.shutdownNow();
+  }
+  
   public void nextTuple() {
     RedisMessage next = messageQueue.poll();
     if(next == null){
