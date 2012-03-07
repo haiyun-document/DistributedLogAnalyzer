@@ -1,0 +1,37 @@
+package com.github.drashid.amqp;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Names;
+import com.rabbitmq.client.AMQP.BasicProperties;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
+
+public class RabbitModule extends AbstractModule {
+
+  public static final String LOG_QUEUE_NAME = "LOG_QUEUE";
+
+  @Override
+  protected void configure() {
+    bind(String.class).annotatedWith(Names.named(LOG_QUEUE_NAME)).toInstance(LOG_QUEUE_NAME);
+  }
+  
+  @Provides @Singleton
+  public ConnectionFactory factory(){
+    ConnectionFactory factory = new ConnectionFactory();
+    //TODO config
+    factory.setUsername("guest");
+    factory.setPassword("guest");
+    factory.setVirtualHost("/");
+    factory.setHost("127.0.0.1");
+    factory.setPort(5672);
+    return factory;
+  }
+  
+  @Provides
+  public BasicProperties props(){
+    return MessageProperties.PERSISTENT_TEXT_PLAIN;
+  }
+  
+}
