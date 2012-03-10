@@ -25,17 +25,17 @@ public abstract class AbstractTailAggregator extends TailerListenerAdapter{
     flusher.start();
   }
   
-  protected abstract void _publishMessage(String message);
+  protected abstract void publishMessage(String message);
   
-  private void publishMessage(String message){
+  private void _publishMessage(String message){
     if(message != null && message.trim().length() > 0){
-      _publishMessage(message);
+      publishMessage(message);
     }
   }
   
   @Override
   public void fileRotated() {
-    publishMessage(getAndReset(sbRef));
+    _publishMessage(getAndReset(sbRef));
   }
   
   private String getAndReset(AtomicReference<StringBuilder> sbRef){
@@ -46,7 +46,7 @@ public abstract class AbstractTailAggregator extends TailerListenerAdapter{
   public void handle(String line) {
     lastHandledTime = System.currentTimeMillis();
     if(logParser.isStartLine(line)){
-      publishMessage(getAndReset(sbRef));
+      _publishMessage(getAndReset(sbRef));
     }
     synchronized (sbRef) {
       sbRef.get().append(line).append("\n");
@@ -56,7 +56,7 @@ public abstract class AbstractTailAggregator extends TailerListenerAdapter{
   public void flushMessages(){
     if( System.currentTimeMillis() - lastHandledTime > FLUSH_WINDOW_IN_MS && sbRef.get().length() > 0){
       synchronized (sbRef) { //contention is unlikely here given we have to have waited past the window
-        publishMessage(getAndReset(sbRef));
+        _publishMessage(getAndReset(sbRef));
       }
     }
   }

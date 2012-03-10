@@ -27,7 +27,7 @@ public class RedisLogPublisher extends AbstractTailAggregator {
   }
   
   @Override
-  protected void _publishMessage(String message){
+  protected void publishMessage(String message){
     redisClient.publish(channel, message);
   }
   

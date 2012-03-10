@@ -15,7 +15,7 @@ public class RabbitLogPublisher extends AbstractTailAggregator {
   }
 
   @Override
-  protected void _publishMessage(String message) {
+  protected void publishMessage(String message) {
     try{
       publisher.sendMessage(message.getBytes());
     }catch(Exception e){ 
