@@ -27,10 +27,7 @@ public class RedisLogPublisher extends AbstractTailAggregator {
   }
   
   @Override
-  protected void publishMessage(String message){
-    if(message == null || (message = message.trim()).length() == 0){
-      return;
-    }
+  protected void _publishMessage(String message){
     redisClient.publish(channel, message);
   }
   

@@ -8,7 +8,6 @@ import backtype.storm.tuple.Fields;
 import com.github.drashid.amqp.RabbitConstants;
 import com.github.drashid.amqp.RabbitPublisher;
 import com.google.inject.Inject;
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
 
@@ -28,10 +27,11 @@ public class RabbitSpout extends AbstractInjectedSpout {
       if (response == null) {
           // No message retrieved.
       } else {
-          AMQP.BasicProperties props = response.getProps();
           byte[] body = response.getBody();
           String message = new String(body, "UTF-8");
-          System.out.println("GOT: " + message);
+          System.out.println("GOT: " + message); 
+          
+          channel.basicAck(response.getEnvelope().getDeliveryTag(), false);
       }
     }catch(Exception e){
       

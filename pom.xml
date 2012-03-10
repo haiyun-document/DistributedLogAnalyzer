@@ -12,6 +12,7 @@
 		<module>LogPublisher</module>
 		<module>LogCore</module>
 		<module>LogPipeline</module>
+		<module>LogConfig</module>
 	</modules>
 
 	<properties>

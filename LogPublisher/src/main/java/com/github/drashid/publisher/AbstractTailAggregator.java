@@ -25,7 +25,13 @@ public abstract class AbstractTailAggregator extends TailerListenerAdapter{
     flusher.start();
   }
   
-  protected abstract void publishMessage(String message);
+  protected abstract void _publishMessage(String message);
+  
+  private void publishMessage(String message){
+    if(message != null && message.trim().length() > 0){
+      _publishMessage(message);
+    }
+  }
   
   @Override
   public void fileRotated() {
@@ -42,7 +48,9 @@ public abstract class AbstractTailAggregator extends TailerListenerAdapter{
     if(logParser.isStartLine(line)){
       publishMessage(getAndReset(sbRef));
     }
-    sbRef.get().append(line).append("\n");
+    synchronized (sbRef) {
+      sbRef.get().append(line).append("\n");
+    }    
   }
 
   public void flushMessages(){
