@@ -1,9 +1,7 @@
 package com.github.drashid.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -14,26 +12,33 @@ public class ConfigModule extends AbstractModule {
 
   private JsonNode config;
   private Class<?>[] clsz; 
-  private ObjectMapper mapper;
+  private static ObjectMapper mapper = new ObjectMapper();
   
-  public ConfigModule(InputStream configStream, Class<?>...configClasses) {
+  public ConfigModule(JsonNode config, Class<?>...configClasses) {
     try{
-      mapper = new ObjectMapper();
-      config = mapper.readTree(configStream);
+      this.config = config;
       clsz = configClasses;
     }catch(Exception ex){
       throw new RuntimeException("Failed to initialize config", ex);
     }
   }
   
-  public ConfigModule(String configFile, Class<?>...configClasses) {
-    try{
-      mapper = new ObjectMapper();
-      config = mapper.readTree(new FileInputStream(new File(configFile)));
-      clsz = configClasses;
-    }catch(Exception ex){
-      throw new RuntimeException("Failed to initialize config", ex);
+  public static JsonNode readResource(String resourcePath){
+    try {
+      return mapper.readTree(ConfigModule.class.getResourceAsStream(resourcePath));
     }
+    catch (Exception e) { return null; }
+  }
+  
+  public static JsonNode readFile(String filename){
+    return readFile(new File(filename));
+  }
+  
+  public static JsonNode readFile(File file){
+    try {
+      return mapper.readTree(file);
+    }
+    catch (Exception e) { return null; }
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })

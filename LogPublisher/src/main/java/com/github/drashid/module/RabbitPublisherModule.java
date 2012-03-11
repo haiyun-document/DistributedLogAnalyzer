@@ -11,7 +11,7 @@ public class RabbitPublisherModule extends AbstractModule{
 
   @Override
   protected void configure() {
-    install(new ConfigModule("config.json", RabbitConfig.class)); 
+    install(new ConfigModule(ConfigModule.readResource("config.json"), RabbitConfig.class)); 
     install(new RabbitModule());
     bind(LogParser.class).to(Slf4jLogParser.class); 
   }

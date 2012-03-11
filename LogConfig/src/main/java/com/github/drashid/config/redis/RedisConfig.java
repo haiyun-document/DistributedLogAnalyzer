@@ -25,4 +25,5 @@ public class RedisConfig {
   public int getPort() {
     return port;
   }
+  
 }

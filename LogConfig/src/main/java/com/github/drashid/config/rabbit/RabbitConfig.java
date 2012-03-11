@@ -17,9 +17,7 @@ public class RabbitConfig {
   private String host;
   private int port;
   
-  public RabbitConfig() {
-  
-  }
+  public RabbitConfig() { }
   
   public String getUsername() {
     return username;

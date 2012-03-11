@@ -25,13 +25,11 @@ public class RabbitPublisher {
   }
   
   public void sendMessage(byte[] body) throws IOException{
-    Connection conn = factory.newConnection();
-    Channel channel = null;
+    Channel channel = newChannel();
     try{
-      channel = conn.createChannel();
       sendMessage(body, channel);
     }finally{
-      closeQuietly(conn);
+      closeQuietly(channel.getConnection());
       closeQuietly(channel);
     }
   }

@@ -13,7 +13,7 @@ public class RedisModule extends AbstractModule{
   
   public RedisModule() {
     try{
-      install(new ConfigModule("config.json", RedisConfig.class));
+      install(new ConfigModule(ConfigModule.readResource("config.json"), RedisConfig.class));
     }catch(Exception e){
       throw new RuntimeException("Could not load config", e);
     }
