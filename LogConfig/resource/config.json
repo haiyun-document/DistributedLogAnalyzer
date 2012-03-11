@@ -1,0 +1,16 @@
+{
+  "redis": {
+     "host": "127.0.0.1",
+     "port": 6379
+  },
+  "rabbitmq": {
+     "logExchange": "log_exchange",
+     "logQueue": "log_queue",
+     "logRoute": "log_route",
+     "password": "guest",
+     "username": "guest",
+     "virtualHost": "/",
+     "host": "127.0.0.1",
+     "port": 5672
+  }
+}

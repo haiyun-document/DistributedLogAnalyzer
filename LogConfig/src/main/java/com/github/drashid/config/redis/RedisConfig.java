@@ -1,4 +1,4 @@
-package com.github.drashid.redis;
+package com.github.drashid.config.redis;
 
 import com.github.drashid.config.Config;
 
@@ -7,11 +7,6 @@ public class RedisConfig {
 
   private String host;
   private int port;
-
-  public RedisConfig(int port, String host){
-    this.port = port;
-    this.host = host;
-  }
   
   public RedisConfig() { }
   

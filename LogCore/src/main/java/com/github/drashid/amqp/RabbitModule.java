@@ -1,5 +1,6 @@
 package com.github.drashid.amqp;
 
+import com.github.drashid.config.rabbit.RabbitConfig;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -18,14 +19,13 @@ public class RabbitModule extends AbstractModule {
   }
   
   @Provides @Singleton
-  public ConnectionFactory factory(){
+  public ConnectionFactory factory(RabbitConfig config){
     ConnectionFactory factory = new ConnectionFactory();
-    //TODO config
-    factory.setUsername("guest");
-    factory.setPassword("guest");
-    factory.setVirtualHost("/");
-    factory.setHost("127.0.0.1");
-    factory.setPort(5672);
+    factory.setUsername(config.getUsername());
+    factory.setPassword(config.getPassword());
+    factory.setVirtualHost(config.getVirtualHost());
+    factory.setHost(config.getHost());
+    factory.setPort(config.getPort());
     return factory;
   }
   

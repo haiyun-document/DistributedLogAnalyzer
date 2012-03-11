@@ -1,6 +1,7 @@
 package com.github.drashid.amqp;
 
 import java.io.IOException;
+import com.github.drashid.config.rabbit.RabbitConfig;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.rabbitmq.client.AMQP.BasicProperties;
