@@ -1,5 +1,8 @@
 package com.github.drashid.redis;
 
+import com.github.drashid.config.Config;
+
+@Config("redis")
 public class RedisConfig {
 
   private String host;
@@ -10,9 +13,14 @@ public class RedisConfig {
     this.host = host;
   }
   
-  public RedisConfig() {
-    this.port = 6379;
-    this.host = "127.0.0.1";
+  public RedisConfig() { }
+  
+  public void setHost(String host) {
+    this.host = host;
+  }
+  
+  public void setPort(int port) {
+    this.port = port;
   }
   
   public String getHost() {

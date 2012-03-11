@@ -16,9 +16,11 @@ public class RabbitPublisher {
   private ConnectionFactory factory;  
   @Inject 
   private BasicProperties props;
+  @Inject
+  private RabbitConfig config;
   
   public void sendMessage(byte[] body, Channel channel) throws IOException{
-    channel.basicPublish(RabbitConstants.LOG_EXCHANGE, RabbitConstants.LOG_ROUTE, props, body);
+    channel.basicPublish(config.getLogExchange(), config.getLogRoute(), props, body);
   }
   
   public void sendMessage(byte[] body) throws IOException{
@@ -33,14 +35,14 @@ public class RabbitPublisher {
     }
   }
 
-  public Channel newChannel() throws IOException{ //TODO leaking connections?
+  public Channel newChannel() throws IOException{
     Connection conn = factory.newConnection();
     Channel channel = conn.createChannel();
     
     //ensure queue to publish to
-    channel.exchangeDeclare(RabbitConstants.LOG_EXCHANGE, "direct", true);
-    channel.queueDeclare(RabbitConstants.LOG_QUEUE, true, false, false, null);
-    channel.queueBind(RabbitConstants.LOG_QUEUE, RabbitConstants.LOG_EXCHANGE, RabbitConstants.LOG_ROUTE);
+    channel.exchangeDeclare(config.getLogExchange(), "direct", true);
+    channel.queueDeclare(config.getLogQueue(), true, false, false, null);
+    channel.queueBind(config.getLogQueue(),config.getLogExchange(), config.getLogRoute());
     
     return channel;
   }

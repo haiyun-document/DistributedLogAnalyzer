@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import com.github.drashid.parse.LogParser;
 import com.github.drashid.parse.Slf4jLogParser;
 import com.github.drashid.redis.RedisChannel;
-import com.github.drashid.redis.RedisConfig;
 import com.github.drashid.redis.RedisModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -27,7 +26,7 @@ public class RedisPublisherModule extends AbstractModule {
   
   @Override
   protected void configure() {
-    install(new RedisModule(new RedisConfig()));
+    install(new RedisModule());
     bind(LogParser.class).to(Slf4jLogParser.class);
   }
 

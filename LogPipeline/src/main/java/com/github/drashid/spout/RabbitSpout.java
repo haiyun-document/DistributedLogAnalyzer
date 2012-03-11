@@ -5,7 +5,7 @@ import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
-import com.github.drashid.amqp.RabbitConstants;
+import com.github.drashid.amqp.RabbitConfig;
 import com.github.drashid.amqp.RabbitPublisher;
 import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
@@ -18,12 +18,15 @@ public class RabbitSpout extends AbstractInjectedSpout {
 
   @Inject
   private RabbitPublisher publisher;
+  @Inject
+  private RabbitConfig config;
+  
   private Channel channel;
   
   public void nextTuple() {
     try{
       boolean autoAck = false;
-      GetResponse response = channel.basicGet(RabbitConstants.LOG_QUEUE, autoAck);
+      GetResponse response = channel.basicGet(config.getLogQueue(), autoAck);
       if (response == null) {
           // No message retrieved.
       } else {

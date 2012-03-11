@@ -6,7 +6,6 @@ import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
 import com.github.drashid.amqp.RabbitModule;
 import com.github.drashid.inject.InjectorManager;
-import com.github.drashid.redis.RedisConfig;
 import com.github.drashid.redis.RedisModule;
 import com.github.drashid.spout.RabbitSpout;
 import com.github.drashid.spout.RedisSpout;
@@ -19,7 +18,7 @@ public class LocalRunner {
   public static class LocalRunnerModule extends AbstractModule{
     @Override
     protected void configure() {
-      install(new RedisModule(new RedisConfig()));  
+      install(new RedisModule());  
       install(new RabbitModule());
       requestStaticInjection(InjectorManager.class);
     }

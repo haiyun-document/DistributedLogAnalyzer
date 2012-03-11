@@ -19,7 +19,6 @@ public class Runner {
       File tailFile = new File(args[0]);
       LOG.info("Listening on file {}...", tailFile.getAbsolutePath());
       
-//      Injector inject = Guice.createInjector(new RedisPublisherModule(tailFile.getName())); //TODO include some machine info?
       Injector inject = Guice.createInjector(new RabbitPublisherModule()); 
       RabbitLogPublisher handler = inject.getInstance(RabbitLogPublisher.class);
       
